@@ -26,8 +26,16 @@ With this connector, it is possible to monitor ADS variables without any complex
 To use this program use the prebuilt binary or compile it yourself with cmake. <br>
 To start the program, launch it and provide in the first argument the path of the configuration file. 
 ```bash
-./AdsPrometheusConnector config.json
+./AdsPrometeusConnector config.json
 ```
+
+### Running as a daemon
+If you are using systemd, you can install this as a daemon. I have provided a example service configuration.
+To start, copy the `AdsPrometheusConnector.service` into the `/etc/systemd/system/` folder. 
+After that, copy the binary into the `/usr/local/bin/` folder. Make sure that the binary is a executable. <br><br>
+
+After setting up the daemon, make a configuration file under `/etc/AdsPropetheusConnector/config.json`. 
+You may also consider using the example config `textConfig.json` as a starting point.
 
 ## Configuration
 

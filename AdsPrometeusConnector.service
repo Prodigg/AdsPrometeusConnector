@@ -1,0 +1,11 @@
+[Unit]
+Description=AdsPrometheusConnector
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/CppAdsPrometeusConnector /etc/AdsPrometheusConnector/config.json
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
