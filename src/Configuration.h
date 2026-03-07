@@ -12,34 +12,93 @@
 using json = nlohmann::json;
 /*
  * Config formate:
- * global {
- *      localNetId <localNetID>
- *      remoteNetId <remoteNetID>
- *      remoteIPv4 <remoteIPv4>
- *      httpPort <httpPort>
- * }
+ * "global": {
+ *      "localNetId": "<localNetID>",
+ *      "remoteNetId": "<remoteNetID>",
+ *      "remoteIPv4": "<remoteIPv4>",
+ *      "httpPort": "<httpPort>"
+ * },
  *
  *
- * <symbolADSName> {
- * [optional] alias <aliasName>
- * [optional] type <untyped|counter|gauge>
- * [optional] description <description>
- * ADSDatatype <datatypes>
- * scrapingTime <timeInS>
- * [optional] labels {
- *          <labelName> {
- *              value <value>
- *          }
- *          <labelName> {
- *              value <value>
- *          }
+ * "<symbolADSName>": {
+ * [optional] "alias": "<aliasName>",
+ * [optional] "type": "<untyped|counter|gauge>",
+ * [optional] "description": "<description>",
+ * "ADSDatatype": "<datatypes>",
+ * "scrapingTime": <timeInS>,
+ * [optional] "labels": {
+ *          "<labelName>": {
+ *              "value": "<value>"
+ *          },
+ *          "<labelName>": {
+ *              "value": "<value>"
+ *          },
  *          ...
  *      }
- * }
+ * [optional] "timeBetweenRead": {
+ *          "show": <true|false>
+ *          [optional] "carryLabels": <true|false>
+ *          [optional] "alias": "<aliasName>"
+ *          [optional] "customDescription": "<customDescription>"
+ *          [optional] "labels": {
+ *              "<labelName>": {
+ *                  "value": "<value>"
+ *              },
+ *              "<labelName>": {
+ *                  "value": "<value>"
+ *              },
+ *              ...
+ *          }
+ *      }
+ * [optional] "readTime": {
+ *          "show": <true|false>
+ *          [optional] "carryLabels": <true|false>
+ *          [optional] "alias": "<aliasName>"
+ *          [optional] "customDescription": "<customDescription>"
+ *          [optional] "labels": {
+ *              "<labelName>": {
+ *                  "value": "<value>"
+ *              },
+ *              "<labelName>": {
+ *                  "value": "<value>"
+ *              },
+ *              ...
+ *          }
+ *      }
+ * [optional] "lastTrySuccessful": {
+ *          "show": <true|false>
+ *          [optional] "carryLabels": <true|false>
+ *          [optional] "alias": "<aliasName>"
+ *          [optional] "customDescription": "<customDescription>"
+ *          [optional] "labels": {
+ *              "<labelName>": {
+ *                  "value": "<value>"
+ *              },
+ *              "<labelName>": {
+ *                  "value": "<value>"
+ *              },
+ *              ...
+ *          }
+ *      }
+ * [optional] "readTimestamp": {
+ *          "show": <true|false>
+ *          [optional] "carryLabels": <true|false>
+ *          [optional] "alias": "<aliasName>"
+ *          [optional] "customDescription": "<customDescription>"
+ *          [optional] "labels": {
+ *              "<labelName>": {
+ *                  "value": "<value>"
+ *              },
+ *              "<labelName>": {
+ *                  "value": "<value>"
+ *              },
+ *              ...
+ *          }
+ *      }
+ * },
  * ...
  *
 */
-
 struct ConfigNetId {
     uint8_t _1 = 0;
     uint8_t _2 = 0;
