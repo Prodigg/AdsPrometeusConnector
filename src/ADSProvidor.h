@@ -87,11 +87,16 @@ private:
     /*!
      * @brief uses a symbol definition to set the symbol to a new value
      */
-    void updateSymbolProcessDataBuffer(symbolDefinition_t& symbolDefinition, std::string value) const;
-    void updateSymbolProcessDataBuffer(symbolDefinition_t &symbolDefinition, const char value) const { updateSymbolProcessDataBuffer (symbolDefinition, std::string{value});}
-    void updateSymbolProcessDataBuffer(symbolDefinition_t& symbolDefinition, const bool value) const { updateSymbolProcessDataBuffer (symbolDefinition, (value ? std::string("1") : std::string("0"))); }
+    void updateSymbolProcessDataBuffer(symbolDefinition_t& symbolDefinition, std::string value, std::chrono::steady_clock::time_point readStartTime) const;
+    void updateSymbolProcessDataBuffer(symbolDefinition_t &symbolDefinition, const char value, const std::chrono::steady_clock::time_point readStartTime) const { updateSymbolProcessDataBuffer (symbolDefinition, std::string{value}, readStartTime);}
+    void updateSymbolProcessDataBuffer(symbolDefinition_t& symbolDefinition, const bool value, const std::chrono::steady_clock::time_point readStartTime) const { updateSymbolProcessDataBuffer (symbolDefinition, (value ? std::string("1") : std::string("0")), readStartTime); }
     template <typename T>
-    void updateSymbolProcessDataBuffer(symbolDefinition_t& symbolDefinition, const T value) requires std::is_integral_v<T> || std::is_floating_point_v<T> { updateSymbolProcessDataBuffer (symbolDefinition, std::to_string(value)); }
+    void updateSymbolProcessDataBuffer(symbolDefinition_t& symbolDefinition, const T value, const std::chrono::steady_clock::time_point readStartTime) requires std::is_integral_v<T> || std::is_floating_point_v<T> { updateSymbolProcessDataBuffer (symbolDefinition, std::to_string(value), readStartTime); }
+
+    /*!
+     * @brief updates the status, if the read fails
+     */
+    void updateSymbolProcessDataBufferFailed(symbolDefinition_t& symbolDefinition) const;
 
     /*!
      * @brief this function checks time last read from symbols and reads them if necessary.
