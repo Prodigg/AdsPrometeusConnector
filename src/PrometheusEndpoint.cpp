@@ -93,11 +93,11 @@ std::string PrometheusEndpoint_t::generateEndpointData() const {
         ss << generateAdditionalData(metric, metric.LastTryStatus,
             "last_try_status",
             "true if the last try was successful",
-            std::to_string(data.wasLastReadSuccessful);
+            std::to_string(data.wasLastReadSuccessful));
         ss << generateAdditionalData(metric, metric.LastReadTimestamp,
-            "read_time",
-            "The time it took to read the symbol Type in NS",
-            std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(data.lastReadTime.time_since_epoch()).count());
+            "timestamp",
+            "UNIX timestamp of last read",
+            std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(data.lastReadTime.time_since_epoch()).count()));
     }
     return ss.str();
 }
