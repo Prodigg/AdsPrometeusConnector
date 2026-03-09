@@ -70,7 +70,7 @@ std::string PrometheusEndpoint_t::generateAdditionalData(const prometheusMetric_
         ss << generateLabel(metric.labels);
     else
         ss << generateLabel(data.labels);
-    ss << " " << value << std::chrono::duration_cast<std::chrono::microseconds>(rawData.lastReadTime.time_since_epoch()).count() << "\n";
+    ss << " " << value << " " << std::chrono::duration_cast<std::chrono::microseconds>(rawData.lastReadTime.time_since_epoch()).count() << "\n";
     return ss.str();
 }
 
