@@ -67,7 +67,7 @@ private:
      * @param symbolType type of symbol
      * @return size of symbol
      */
-    static uint32_t mapSymbolTipeToSize(const symbolDataType_t& symbolType );
+    static uint32_t mapSymbolTipeToSize(const symbolDataType_t& symbolType);
 
     /*!
      * @brief uses a symbol definition to set the symbol to a new value

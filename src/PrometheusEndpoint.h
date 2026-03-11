@@ -53,6 +53,8 @@ struct prometheusMetric_t {
     additionalDataMetric_t LastReadTimestamp; // the timestamp of the last read
 };
 
+class grafanaMetricGenerator_t;
+
 class PrometheusEndpoint_t {
 public:
     explicit PrometheusEndpoint_t(ProcessDataBuffer_t& dataBuffer, uint16_t port);
@@ -90,55 +92,13 @@ private:
     static std::string getPrometheusMetricName(const prometheusMetric_t& metric);
 
     /*!
-     * @brief generate the help text for the prometheus endpoint
-     * @param metric
-     * @return
-     */
-    static std::string generateHelp(const prometheusMetric_t& metric);
-
-    /*!
-     * @brief generate the type text for the prometheus endpoint
-     * @param metric
-     * @return
-     */
-    static std::string generateType(const prometheusMetric_t& metric);
-
-    /*!
-     * @brief generate the dataline for the prometheus endpoint
-     * @param metric
-     * @return
-     */
-    std::string generateDataLine(const prometheusMetric_t& metric) const;
-
-    /*!
-     * @brief generates the label string for additional categorization.
-     * @param metric
-     * @return
-     */
-    static std::string generateLabel(const std::vector<label_t>& labels);
-
-    /*!
-     * @brief properly escape the help text
-     * @param str
-     * @return
-     */
-    static std::string escapeHelpStr(std::string_view str);
-
-    /*!
-     * @brief properly escape the label text
-     * @param str
-     * @return
-     */
-    static std::string escapeLabelStr(std::string_view str);
-
-    /*!
      * @brief generates the full endpoint data to serve
      * @return
      */
     std::string generateEndpointData() const;
 
     /*!
-     * @brief generate prometheus symbol for additonal data
+     * @brief generate prometheus symbol for additional data
      * @param data additional data
      * @return
      */
@@ -153,6 +113,76 @@ private:
     Pistache::Address addr;
     Pistache::Http::Endpoint endpoint;
     Pistache::Rest::Router router;
+};
+
+class grafanaMetricGenerator_t {
+public:
+    /*!
+     * @brief generate a metric string
+     * @param metricName
+     * @param data
+     * @param helpStr
+     * @param type
+     * @param labels
+     * @param readTime
+     * @return metric string
+     */
+    [[nodiscard]] static std::string generateMetric(
+        std::string_view metricName,
+        std::string_view data,
+        std::string_view helpStr,
+        prometheusMetricType type,
+        const std::vector<label_t>& labels,
+        std::chrono::system_clock::time_point readTime);
+
+
+private:
+    /*!
+     * @brief properly escape the label text
+     * @param str
+     * @return
+     */
+    [[nodiscard]] static std::string escapeLabelStr(std::string_view str);
+
+    /*!
+     * @brief properly escape the help text
+     * @param str
+     * @return
+     */
+    [[nodiscard]] static std::string escapeHelpStr(std::string_view str);
+
+    /*!
+     * @brief generate the help text for the prometheus endpoint
+     * @param helpStr
+     * @param metricName
+     * @return
+     */
+    [[nodiscard]] static std::string generateHelp(std::string_view helpStr, std::string_view metricName);
+
+    /*!
+     * @brief generate the type text for the prometheus endpoint
+     * @param type
+     * @param metricName
+     * @return
+     */
+    [[nodiscard]] static std::string generateType(prometheusMetricType type, std::string_view metricName);
+
+    /*!
+     * @brief generate the dataline for the prometheus endpoint
+     * @param metricName
+     * @param data
+     * @param labels
+     * @param dataReadTime
+     * @return
+     */
+    [[nodiscard]] static std::string generateDataLine(std::string_view metricName, std::string_view data, const std::vector<label_t>& labels, std::chrono::system_clock::time_point dataReadTime);
+
+    /*!
+     * @brief generates the label string for additional categorization.
+     * @param labels
+     * @return
+     */
+    [[nodiscard]] static std::string generateLabel(const std::vector<label_t>& labels);
 };
 
 #endif //CPPADSPROMETEUSCONNECTOR_PROMETHEUSENDPOINT_H
