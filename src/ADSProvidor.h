@@ -62,15 +62,6 @@ public:
 
 private:
 
-    static void subscribeSymbols();
-    static void unsubscribeSymbols();
-
-    /*!
-     * @brief subscribes to symbol
-     * @param symbolDefinition symbol to subscribe to
-     */
-    void subscribeSymbol(symbolDefinition_t& symbolDefinition);
-
     /*!
      * @brief get from symboltype the size
      * @param symbolType type of symbol
@@ -101,18 +92,18 @@ private:
     /*!
      * @brief this function checks time last read from symbols and reads them if necessary.
      */
-    void forceReadSymbol();
+    void readSymbols();
 
     /*!
      * @brief mark symbol to read
      * @param symbolDefinition
      */
-    void readSymbol(symbolDefinition_t& symbolDefinition);
+    void addSymbolForReading(symbolDefinition_t& symbolDefinition);
 
     /*!
      * @brief read all marked symbols and insert them into the process data buffer
      */
-    void readAllSymbols();
+    void readAllMarkedSymbols();
 
     /*!
      * Converts a duration to a time that is n*100ns

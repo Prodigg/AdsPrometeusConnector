@@ -70,26 +70,26 @@ void AdsProvider_t::threadLoop(std::stop_token stoken) {
     while (!stoken.stop_requested()) {
         {
             std::scoped_lock(_symbolNamesMutex);
-            forceReadSymbol();
+            readSymbols();
         }
         next += std::chrono::milliseconds(_refreshTimeResolution);
         std::this_thread::sleep_until(next); // wait to allow for addSymbol to insert data into _symbolName
     }
 }
 
-void AdsProvider_t::forceReadSymbol() {
+void AdsProvider_t::readSymbols() {
     for (symbolDefinition_t& symbol: _symbolNames) {
         if (symbol.lastRead + symbol.expirationDuration <= std::chrono::high_resolution_clock::now())
-            readSymbol(symbol);
+            addSymbolForReading(symbol);
     }
-    readAllSymbols();
+    readAllMarkedSymbols();
 }
 
-void AdsProvider_t::readSymbol(symbolDefinition_t& symbolDefinition) {
+void AdsProvider_t::addSymbolForReading(symbolDefinition_t& symbolDefinition) {
     _symbolsToRead.push(&symbolDefinition);
 }
 
-void AdsProvider_t::readAllSymbols() {
+void AdsProvider_t::readAllMarkedSymbols() {
     if (_symbolsToRead.empty())
         return;
 
