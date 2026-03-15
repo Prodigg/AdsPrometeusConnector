@@ -10,12 +10,19 @@
 
 #include "AdsVariableList.h"
 
-AdsProvider_t::AdsProvider_t(ProcessDataBuffer_t& processDataBuffer, AmsNetId remoteAmsNetId, std::string remoteIPv4, const AmsNetId localAmsNetId, const long refreshTimeResolution) :
+AdsProvider_t::AdsProvider_t(ProcessDataBuffer_t& processDataBuffer, AmsNetId remoteAmsNetId, std::string remoteIPv4, const AmsNetId localAmsNetId, const long refreshTimeResolution, uint16_t amsRemotePort) :
     _processDataBuffer(processDataBuffer), _refreshTimeResolution(refreshTimeResolution) {
 
+    uint16_t _amsRemotePort = AMSPORT_R0_PLC_TC3;
+    if (amsRemotePort != 0)
+        _amsRemotePort = amsRemotePort;
+
     bhf::ads::SetLocalAddress(localAmsNetId);
-    _device.emplace(remoteIPv4, remoteAmsNetId, AMSPORT_R0_PLC_TC3); //TODO: make port configurable in config
-    std::cout << "INFO: Starting ADS client. Remote IP: " << remoteIPv4 << " Remote AmsNetID: " << remoteAmsNetId << " Port: " << AMSPORT_R0_PLC_TC3 << "\n";
+    _device.emplace(remoteIPv4, remoteAmsNetId, AMSPORT_R0_PLC_TC3);
+    std::cout << "INFO: Starting ADS client. Remote IP: " << remoteIPv4 <<
+        " Remote AmsNetID: " << remoteAmsNetId << " Remote Port: " << _amsRemotePort <<
+            " Local AmsNetID: " << localAmsNetId << " RemotePort: " << _amsRemotePort <<
+                " LocalPort: " << _device->GetLocalPort() << "\n";
     _thread.emplace(std::jthread(&AdsProvider_t::threadLoop, this));
 }
 

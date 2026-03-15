@@ -57,6 +57,7 @@ You may also consider using the example config `textConfig.json` as a starting p
     "remoteNetId": "<NetID of SPS>",
     "remoteIp": "<IP of SPS>",
     "httpPort": 9090,
+    "adsRemotePort": 851,
     "pollTimeResolution": 500
   },
 
@@ -121,6 +122,9 @@ $$
 
 Please note, that when decreasing the pollResolutionTime may have a noticeable effect on CPU time, 
 when the connector is not reading any ADS variable. Setting the time to 0 may cause the program to use any available CPU time. 
+
+### adsRemotePort
+This is an optional config point. It specifies the ADS port on the remote.
 
 ### Labels
 Inside the `Labels` struct, a list of labels can be provided, the example above only shows one label.

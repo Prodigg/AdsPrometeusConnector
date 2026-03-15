@@ -16,6 +16,7 @@ using json = nlohmann::json;
  *      "localNetId": "<localNetID>",
  *      "remoteNetId": "<remoteNetID>",
  *      "remoteIPv4": "<remoteIPv4>",
+ *      [optional] "adsRemotePort": <adsRemotePort>,
  *      "httpPort": <httpPort>,
  *      [optional] "pollTimeResolution": <resolutionTime_ms>
  * },
@@ -133,7 +134,7 @@ private:
  */
 class config_t {
 public:
-    void readConfig(std::string fileName);
+    void readConfig(const std::string& fileName);
     [[nodiscard]] inline ConfigNetId getLocalNetId() const {return localNetId;}
     [[nodiscard]] inline ConfigNetId getRemoteNetId() const {return remoteNetId;}
     [[nodiscard]] inline std::string getRemoteIp() const {return remoteIp;};
@@ -159,6 +160,7 @@ private:
     ConfigNetId remoteNetId {"0.0.0.0.0"};
     std::string remoteIp;
     uint16_t httpPort = 0;
+    uint16_t adsRemotePort = 0;
 
     struct variable_t {
         std::string symbolADSName;

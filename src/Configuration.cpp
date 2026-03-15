@@ -13,6 +13,7 @@
  *      "remoteNetId": "<remoteNetID>",
  *      "remoteIPv4": "<remoteIPv4>",
  *      "httpPort": <httpPort>,
+ *      [optional] "adsRemotePort": <adsRemotePort>,
  *      [optional] "pollTimeResolution": <resolutionTime_ms>
  * },
  *
@@ -97,7 +98,7 @@
  *
 */
 
-void config_t::readConfig(std::string fileName) {
+void config_t::readConfig(const std::string& fileName) {
     if (fileName.empty()) {
         std::cerr<<"ERROR: Configuration file name is empty"<<std::endl;
         exit(EXIT_FAILURE);
@@ -143,6 +144,9 @@ void config_t::processConfig() {
         refreshTimeResolution = 500;
     else
         refreshTimeResolution = configData.at("global").at("pollTimeResolution");
+
+    if (configData.at("global").contains("adsRemotePort"))
+        adsRemotePort = configData.at("global").at("adsRemotePort");
 
     //parse the ads symbols
     for (const auto & value: configData.items()) {
