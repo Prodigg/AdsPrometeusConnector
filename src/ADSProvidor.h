@@ -42,12 +42,8 @@ struct symbolDefinition_t {
     symbolDataType_t symbolType;
 
     // max time allowed to wait for value change (manual read required)
-    std::chrono::high_resolution_clock::duration expirationDuration;
-    std::chrono::high_resolution_clock::time_point lastRead;
-
-    // true, if value is subscribed to
-    bool subscribed = false;
-    std::optional<AdsNotification> adsNotification;
+    std::chrono::steady_clock::duration expirationDuration;
+    std::chrono::steady_clock::time_point lastRead;
 };
 
 /*! Due to constraints to the callback function, subscribing is currently not implemented
@@ -58,7 +54,7 @@ class AdsProvider_t {
 public:
     explicit AdsProvider_t(ProcessDataBuffer_t& processDataBuffer, AmsNetId remoteAmsNetId, std::string remoteIPv4, AmsNetId localAmsNetId, long refreshTimeResolution);
     ~AdsProvider_t();
-    void addSymbol(const std::string& symbolName, symbolDataType_t symbolType, std::chrono::high_resolution_clock::duration scrapingTime);
+    void addSymbol(const std::string& symbolName, symbolDataType_t symbolType, std::chrono::steady_clock::duration scrapingTime);
 
 private:
 

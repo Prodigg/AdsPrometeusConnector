@@ -24,9 +24,9 @@ AdsProvider_t::~AdsProvider_t() {
     _device.reset();
 }
 
-void AdsProvider_t::addSymbol(const std::string& symbolName, symbolDataType_t symbolType, std::chrono::high_resolution_clock::duration scrapingTime) {
+void AdsProvider_t::addSymbol(const std::string& symbolName, symbolDataType_t symbolType, std::chrono::steady_clock::duration scrapingTime) {
     std::scoped_lock(_symbolNamesMutex);
-    _symbolNames.emplace_back(symbolName, symbolType, scrapingTime, std::chrono::high_resolution_clock::now());
+    _symbolNames.emplace_back(symbolName, symbolType, scrapingTime, std::chrono::steady_clock::now());
 }
 
 void AdsProvider_t::updateSymbolProcessDataBufferFailed(symbolDefinition_t& symbolDefinition) const {
@@ -34,7 +34,7 @@ void AdsProvider_t::updateSymbolProcessDataBufferFailed(symbolDefinition_t& symb
     _processDataBuffer.getSymbolData(symbolDefinition.symbolName, data);
     data.wasLastReadSuccessful = false;
     _processDataBuffer.setSymbolData(symbolDefinition.symbolName, data);
-    symbolDefinition.lastRead = std::chrono::high_resolution_clock::now();
+    symbolDefinition.lastRead = std::chrono::steady_clock::now();
 }
 
 void AdsProvider_t::updateSymbolProcessDataBufferFailed(const std::string & symbolName) {
@@ -53,7 +53,7 @@ void AdsProvider_t::updateSymbolProcessDataBufferFailed(const std::string & symb
 }
 
 void AdsProvider_t::updateSymbolProcessDataBuffer(symbolDefinition_t& symbolDefinition, const std::string& value, const std::chrono::steady_clock::time_point readStartTime) const {
-    const auto lastCurrentTime = std::chrono::high_resolution_clock::now() - symbolDefinition.lastRead;
+    const auto lastCurrentTime = std::chrono::steady_clock::now() - symbolDefinition.lastRead;
     const auto symbolReadTime = std::chrono::steady_clock::now() - readStartTime;
     _processDataBuffer.setSymbolData(symbolDefinition.symbolName,
         {.lastCurrentTime = lastCurrentTime,
@@ -62,7 +62,7 @@ void AdsProvider_t::updateSymbolProcessDataBuffer(symbolDefinition_t& symbolDefi
             .wasLastReadSuccessful = true,
             .symbolValue = value
         });
-    symbolDefinition.lastRead = std::chrono::high_resolution_clock::now();
+    symbolDefinition.lastRead = std::chrono::steady_clock::now();
 }
 
 void AdsProvider_t::threadLoop(std::stop_token stoken) {
@@ -80,7 +80,7 @@ void AdsProvider_t::threadLoop(std::stop_token stoken) {
 
 void AdsProvider_t::readSymbols() {
     for (symbolDefinition_t& symbol: _symbolNames) {
-        if (symbol.lastRead + symbol.expirationDuration <= std::chrono::high_resolution_clock::now())
+        if (symbol.lastRead + symbol.expirationDuration <= std::chrono::steady_clock::now())
             addSymbolForReading(symbol);
     }
     readAllMarkedSymbols();
